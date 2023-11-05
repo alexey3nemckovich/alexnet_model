@@ -60,7 +60,7 @@ object AppModule {
         @Named("gson") gson: Gson,
         @Named("httpClient") httpClient: OkHttpClient
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(Constants.BASE_CHATBOT_API_URL)
+        .baseUrl(Constants.BASE_ASRM_API_URL)
         //.baseUrl(Constants.BASE_ASRM_API_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(httpClient)

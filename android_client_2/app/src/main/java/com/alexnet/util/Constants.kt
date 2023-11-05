@@ -5,7 +5,7 @@ object Constants {
     const val BASE_CHATBOT_API_URL =
         "http://10.0.2.2:8000/"
     const val BASE_ASRM_API_URL =
-        "http://10.0.2.2:8000/"
+        "http://10.0.2.2:8080/"
 
 
     //App

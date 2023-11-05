@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface ChatbotApi {
 
-    @POST("getResponse")
+    @POST("response")
     suspend fun sendMessage(
         @Query("message") message: String
     ): Response<String>

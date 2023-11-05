@@ -3,13 +3,13 @@ if __name__ == '__main__':
     import argparse
     from datetime import datetime
     import torch
-    from torchvision import transforms
-    import data_setup
-    import engine
-    import model_builder
-    import utils
+    from data_setup import data_setup
+    from engine import model_builder
+    from engine import engine
+    from utils import utils
     import torch.nn as nn
     import torchaudio
+    import os
 
     # Create a parser
     parser = argparse.ArgumentParser(description="Get some hyperparameters.")
@@ -44,6 +44,12 @@ if __name__ == '__main__':
                         type=str,
                         help="directory file path to testing data in standard image classification format")
 
+    # Create an arg for test directory
+    parser.add_argument("--cache_dir",
+                        default="./data/",
+                        type=str,
+                        help="directory file path to testing data in standard image classification format")
+
     # Get our arguments from the parser
     args = parser.parse_args()
 
@@ -57,6 +63,11 @@ if __name__ == '__main__':
     # Setup data urls
     train_data_url = args.train_data_url
     test_data_url = args.test_data_url
+    cache_dir = args.cache_dir
+
+    if not cache_dir:
+        cache_dir = os.path.join(os.getcwd(), "data")
+
     print(f"[INFO] Training data url: {train_data_url}")
     print(f"[INFO] Testing data url: {test_data_url}")
 
@@ -76,7 +87,8 @@ if __name__ == '__main__':
         valid_audio_transforms=valid_audio_transforms,
         batch_size=BATCH_SIZE,
         train_data_url=train_data_url,
-        test_data_url=test_data_url
+        test_data_url=test_data_url,
+        cache_dir=cache_dir
     )
 
     hparams = {

@@ -125,7 +125,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun convertSpeechToText(speechAudio: File) = viewModelScope.launch(Dispatchers.Default) {
+    private fun convertSpeechToText(speechAudio: File) = viewModelScope.launch(Dispatchers.Default) {
 //        val mediaPlayer = MediaPlayer()
 //        mediaPlayer.setDataSource(speechAudio.path)
 //        mediaPlayer.prepare()
