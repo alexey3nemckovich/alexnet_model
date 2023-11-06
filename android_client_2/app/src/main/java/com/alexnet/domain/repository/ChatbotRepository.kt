@@ -6,7 +6,7 @@ typealias SendMessageResponse = Response<String>
 
 interface ChatbotRepository {
 
-    suspend fun sendMessage(
+    suspend fun getResponse(
         message: String
     ): SendMessageResponse
 

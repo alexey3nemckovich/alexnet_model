@@ -2,10 +2,10 @@ package com.alexnet.domain.use_case
 
 import com.alexnet.domain.repository.ChatbotRepository
 
-class SendMessage(
+class GetBotResponse(
     private val repo: ChatbotRepository
 ) {
     suspend operator fun invoke(
         message: String
-    ) = repo.sendMessage(message)
+    ) = repo.getResponse(message)
 }

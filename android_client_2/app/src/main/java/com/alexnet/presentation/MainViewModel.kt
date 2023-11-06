@@ -1,11 +1,6 @@
 package com.alexnet.presentation
 
-import android.media.MediaPlayer
-import android.os.Environment
-import android.provider.MediaStore.Audio
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -20,11 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.*
 import com.alexnet.util.AudioRecorder
-import com.alexnet.util.Constants
 import kotlinx.coroutines.delay
 import java.io.File
 
@@ -110,7 +101,7 @@ class MainViewModel @Inject constructor(
 
     fun sendMessage(message: String) = viewModelScope.launch(Dispatchers.Default) {
         sendMessageResponse = Loading
-        sendMessageResponse = useCases.sendMessage(message)
+        sendMessageResponse = useCases.getBotResponse(message)
 
         when (val response = sendMessageResponse){
             // delete file

@@ -94,7 +94,7 @@ object AppModule {
         chatbotRepo: ChatbotRepository,
         asrmRepo: AsrmRepository
     ) = UseCases(
-        sendMessage = SendMessage(chatbotRepo),
+        getBotResponse = GetBotResponse(chatbotRepo),
         convertSpeechToText = ConvertSpeechToText(asrmRepo)
     )
 }
