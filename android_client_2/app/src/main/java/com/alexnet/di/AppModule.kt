@@ -6,10 +6,13 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.alexnet.data.remote.AsrmApi
 import com.alexnet.data.remote.ChatbotApi
+import com.alexnet.data.remote.TtsApi
 import com.alexnet.data.repository.AsrmRepositoryImpl
 import com.alexnet.data.repository.ChatbotRepositoryImpl
+import com.alexnet.data.repository.TtsRepositoryImpl
 import com.alexnet.domain.repository.AsrmRepository
 import com.alexnet.domain.repository.ChatbotRepository
+import com.alexnet.domain.repository.TtsRepository
 import com.alexnet.domain.use_case.*
 import com.alexnet.util.Constants
 import dagger.Module
@@ -68,6 +71,19 @@ object AppModule {
 
     @Provides
     @Singleton
+    @Named("tts")
+    fun provideTtsRetrofit(
+        @Named("gson") gson: Gson,
+        @Named("httpClient") httpClient: OkHttpClient
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(Constants.BASE_TTS_API_URL)
+        //.baseUrl(Constants.BASE_ASRM_API_URL)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(httpClient)
+        .build()
+
+    @Provides
+    @Singleton
     fun provideChatbotApi(@Named("chatbot") retrofit: Retrofit): ChatbotApi =
         retrofit.create(ChatbotApi::class.java)
 
@@ -75,6 +91,11 @@ object AppModule {
     @Singleton
     fun provideAsrmApi(@Named("asrm") retrofit: Retrofit): AsrmApi =
         retrofit.create(AsrmApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTtsApi(@Named("tts") retrofit: Retrofit): TtsApi =
+        retrofit.create(TtsApi::class.java)
 
     @Provides
     @Singleton
@@ -90,11 +111,19 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideTtsRepository(
+        ttsApi: TtsApi
+    ): TtsRepository = TtsRepositoryImpl(ttsApi)
+
+    @Provides
+    @Singleton
     fun provideUseCases(
         chatbotRepo: ChatbotRepository,
-        asrmRepo: AsrmRepository
+        asrmRepo: AsrmRepository,
+        ttsRepo: TtsRepository
     ) = UseCases(
         getBotResponse = GetBotResponse(chatbotRepo),
-        convertSpeechToText = ConvertSpeechToText(asrmRepo)
+        convertSpeechToText = ConvertSpeechToText(asrmRepo),
+        convertTextToSpeech = ConvertTextToSpeech(ttsRepo)
     )
 }

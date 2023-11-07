@@ -1,23 +1,30 @@
 package com.alexnet.presentation
 
+import android.media.MediaPlayer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alexnet.AlexNetApp
 import com.alexnet.domain.model.Message
-import com.alexnet.domain.repository.ConvertSpeechToTextResponse
-import com.alexnet.domain.repository.SendMessageResponse
 import com.alexnet.domain.model.Response.Loading
 import com.alexnet.domain.model.Response.Success
+import com.alexnet.domain.repository.ConvertSpeechToTextResponse
+import com.alexnet.domain.repository.ConvertTextToSpeechResponse
+import com.alexnet.domain.repository.SendMessageResponse
 import com.alexnet.domain.use_case.UseCases
+import com.alexnet.util.AudioRecorder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-import com.alexnet.util.AudioRecorder
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import java.io.File
+import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -26,9 +33,13 @@ class MainViewModel @Inject constructor(
 
     var messages by mutableStateOf<List<Message>>(ArrayList())
         private set
+    var spellResponse by mutableStateOf(true)
+        private set
     var sendMessageResponse by mutableStateOf<SendMessageResponse>(Success(""))
         private set
     var convertSpeechToTextResponse by mutableStateOf<ConvertSpeechToTextResponse>(Success(""))
+        private set
+    var convertTextToSpeechResponse by mutableStateOf<ConvertTextToSpeechResponse>(Success("".toResponseBody(null)))
         private set
 
     var loadingStatus by mutableStateOf(true)
@@ -99,6 +110,10 @@ class MainViewModel @Inject constructor(
         //getLineItems()
     }
 
+    fun updateSpellSwitchState(turn: Boolean) = viewModelScope.launch{
+        spellResponse = turn
+    }
+
     fun sendMessage(message: String) = viewModelScope.launch(Dispatchers.Default) {
         sendMessageResponse = Loading
         sendMessageResponse = useCases.getBotResponse(message)
@@ -111,6 +126,34 @@ class MainViewModel @Inject constructor(
                 list.add(Message(true, response.data))
 
                 messages = list
+
+                if (spellResponse){
+                    convertTextToSpeechResponse = Loading
+                    convertTextToSpeechResponse = useCases.convertTextToSpeech(response.data)
+
+                    when (val speechResponse = convertTextToSpeechResponse){
+                        is Success -> {
+                            val mediaPlayer = MediaPlayer()
+                            val audioData = speechResponse.data.bytes()
+
+                            val tempAudioFile =
+                                withContext(Dispatchers.IO) {
+                                    File.createTempFile(
+                                        "tempAudio",
+                                        ".mp3",
+                                        AlexNetApp.appContext.cacheDir
+                                    )
+                                }
+
+                            tempAudioFile.writeBytes(audioData)
+
+                            mediaPlayer.setDataSource(tempAudioFile.absolutePath)
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        }
+                        else -> {}
+                    }
+                }
             }
             else -> {}
         }

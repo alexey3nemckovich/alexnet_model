@@ -2,5 +2,6 @@ package com.alexnet.domain.use_case
 
 data class UseCases(
     val getBotResponse: GetBotResponse,
-    val convertSpeechToText: ConvertSpeechToText
+    val convertSpeechToText: ConvertSpeechToText,
+    val convertTextToSpeech: ConvertTextToSpeech,
 )

@@ -15,7 +15,12 @@ fun MessangerScreen(
 ) {
     Scaffold(
         topBar = {
-            TopBar()
+            TopBar(
+                switchState = viewModel.spellResponse,
+                onSwitchStateChanged = { isChecked ->
+                    viewModel.updateSpellSwitchState(isChecked)
+                }
+            )
         },
         content = { padding ->
             MessangerContent(
