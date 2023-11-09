@@ -8,10 +8,16 @@ import com.alexnet.presentation.screens.welcome.WelcomeScreen
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    requestMicrophonePermissions: () -> Unit,
+    openAppPermissionsSettings: () -> Unit,
 ) {
     when (viewModel.loadingStatus) {
-        true -> WelcomeScreen()
+        true -> WelcomeScreen(
+            requestMicrophonePermissions = requestMicrophonePermissions,
+            openAppPermissionsSettings = openAppPermissionsSettings,
+        )
+
         false -> MessangerScreen()
     }
 }

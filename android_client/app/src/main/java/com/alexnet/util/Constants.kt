@@ -15,6 +15,7 @@ object Constants {
 
     //Shared prefs
     const val SHARED_PREFS_NAME = "com.alexnet.data"
+    const val PERMISSIONS_DENIED_PREF = "PERMISSIONS_DENIED"
 
     const val DEFAULT_AUDIO_FILE_NAME = "speech.wav"
 }

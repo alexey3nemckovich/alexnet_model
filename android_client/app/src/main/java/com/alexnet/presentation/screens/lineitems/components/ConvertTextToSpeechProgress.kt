@@ -10,18 +10,18 @@ import com.alexnet.domain.model.Response.Loading
 import com.alexnet.presentation.MainViewModel
 
 @Composable
-fun ConvertSpeechToTextProgress(
+fun ConvertTextToSpeechProgress(
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    when (val convertSpeechToTextResponse = viewModel.convertSpeechToTextResponse) {
-        is Loading -> ProgressBarDialog("Converting speech to text...")
+    when (val convertTextToSpeechResponse = viewModel.convertTextToSpeechResponse) {
+        is Loading -> ProgressBarDialog("Converting text to speech...")
         is Failure -> {
             Toast.makeText(
                 LocalContext.current,
-                "Failed to convert speech to text: " + convertSpeechToTextResponse.e!!.message,
+                "Failed to convert speech to text: " + convertTextToSpeechResponse.e!!.message,
                 Toast.LENGTH_LONG
             ).show()
-            print(convertSpeechToTextResponse.e)
+            print(convertTextToSpeechResponse.e)
         }
         else -> {
 

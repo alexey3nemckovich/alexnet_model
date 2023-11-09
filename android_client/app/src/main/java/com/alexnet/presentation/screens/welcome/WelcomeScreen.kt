@@ -40,14 +40,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alexnet.R
-import com.alexnet.domain.model.Response
 import com.alexnet.presentation.MainViewModel
 import com.alexnet.presentation.screens.welcome.components.AppLoadingProgressIndicator
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun WelcomeScreen(
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    requestMicrophonePermissions: () -> Unit,
+    openAppPermissionsSettings: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -55,7 +56,7 @@ fun WelcomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val infiniteTransition = rememberInfiniteTransition()
+        val infiniteTransition = rememberInfiniteTransition(label = "")
 
         val offset by infiniteTransition.animateFloat(
             initialValue = 0f,
@@ -63,7 +64,7 @@ fun WelcomeScreen(
             animationSpec = infiniteRepeatable(
                 animation = tween(durationMillis = 2000, easing = LinearEasing),
                 repeatMode = RepeatMode.Restart
-            )
+            ), label = ""
         )
 
         val brush = remember(offset) {
@@ -114,7 +115,31 @@ fun WelcomeScreen(
             modifier = Modifier.width(200.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AppLoadingProgressIndicator()
+            when{
+                viewModel.permissionsStatus == MainViewModel.PermissionsStatus.SHOULD_SHOW_RATIONALE -> {
+                    Text(
+                        text = "Microphone permission is required for this application. You won't be able to use it otherwise.",
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Button(onClick = requestMicrophonePermissions) {
+                        Text(text = "Try again")
+                    }
+                }
+
+                viewModel.permissionsStatus == MainViewModel.PermissionsStatus.DENIED_FOREVER -> {
+                    Text(
+                        text = "Microphone permission is required for this application. You won't be able to use it otherwise. Open application settings to enable it.",
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Button(onClick = openAppPermissionsSettings) {
+                        Text(text = "Try again")
+                    }
+                }
+
+                else -> AppLoadingProgressIndicator()
+            }
         }
     }
 }

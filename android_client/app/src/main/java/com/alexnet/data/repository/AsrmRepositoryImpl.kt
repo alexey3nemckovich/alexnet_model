@@ -23,7 +23,7 @@ class AsrmRepositoryImpl @Inject constructor(
                 asrmApi.getAudioTranscription(body)
             },
             parseResponse = {
-                it.body()!!
+                it.body()!!.text
             }
         )
     }

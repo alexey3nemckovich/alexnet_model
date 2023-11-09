@@ -20,8 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import java.io.File
 import javax.inject.Inject
@@ -35,6 +33,9 @@ class MainViewModel @Inject constructor(
         private set
     var spellResponse by mutableStateOf(true)
         private set
+    var recordingAudio by mutableStateOf(false)
+        private set
+
     var sendMessageResponse by mutableStateOf<SendMessageResponse>(Success(""))
         private set
     var convertSpeechToTextResponse by mutableStateOf<ConvertSpeechToTextResponse>(Success(""))
@@ -44,11 +45,11 @@ class MainViewModel @Inject constructor(
 
     var loadingStatus by mutableStateOf(true)
         private set
-
-    var recordingAudio by mutableStateOf<Boolean>(false)
+    var permissionsStatus by mutableStateOf(PermissionsStatus.NOT_INITIALIZED)
         private set
 
     private val audioRecorder = AudioRecorder()
+    private var outputFilePath: String = ""
 
     enum class PermissionsStatus {
         NOT_INITIALIZED,
@@ -57,19 +58,31 @@ class MainViewModel @Inject constructor(
         GRANTED
     }
 
-    //var appStart = true
+    private fun delayUI() = viewModelScope.launch {
+        delay(3000)
 
-    init {
-        viewModelScope.launch {
-            delay(3000)
+        loadingStatus = false
+    }
 
-            loadingStatus = false
+    private fun updateLoadingStatus() {
+        val loadingStatusTemp =
+            permissionsStatus != PermissionsStatus.GRANTED
+
+        if (!loadingStatusTemp){
+            delayUI()
         }
     }
 
-    var outputFilePath: String = ""
+    fun updatePermissionsStatus(status: PermissionsStatus) =
+        viewModelScope.launch(Dispatchers.Default) {
+            permissionsStatus = status
 
-    fun setFilePath(filePath: String){
+            if (PermissionsStatus.GRANTED == permissionsStatus) {
+                updateLoadingStatus()
+            }
+        }
+
+    fun setAudioRecordingOutputFilePath(filePath: String){
         outputFilePath = filePath
     }
 
@@ -90,24 +103,6 @@ class MainViewModel @Inject constructor(
     fun cancelRecordingAudio() = viewModelScope.launch{
         audioRecorder.cancelRecording()
         recordingAudio = false
-    }
-
-    fun checkUpdates() = viewModelScope.launch(Dispatchers.Default) {
-        //AppCheckUtils.updateAppCheckToken()
-        //DeviceUtils.updateDeviceId()
-        //updateLineItems()
-    }
-
-    private fun updateLoadingStatus() {
-//        loadingStatus =
-//            permissionsStatus != PermissionsStatus.GRANTED || appInstanceRegistered != true || _loadingEstablishments.value || initializingCurrentEstablishment
-    }
-
-    private fun initApp() {
-        //updateAppInstanceRegistrationStatus(SharedPrefsManager.isAppRegistered())
-        //updateFCMToken()
-        //getEstablishments()
-        //getLineItems()
     }
 
     fun updateSpellSwitchState(turn: Boolean) = viewModelScope.launch{
@@ -160,10 +155,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun convertSpeechToText(speechAudio: File) = viewModelScope.launch(Dispatchers.Default) {
-//        val mediaPlayer = MediaPlayer()
-//        mediaPlayer.setDataSource(speechAudio.path)
-//        mediaPlayer.prepare()
-//        mediaPlayer.start()
         convertSpeechToTextResponse = Loading
         convertSpeechToTextResponse = useCases.convertSpeechToText(speechAudio)
 

@@ -16,5 +16,15 @@ class SharedPrefsManager(private val context: Context) {
                 context.getSharedPreferences(Constants.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         }
 
+        fun arePermissionsDenied(): Boolean {
+            return sharedPreferences.getBoolean(Constants.PERMISSIONS_DENIED_PREF, false)
+        }
+
+        fun setPermissionsDenied(denied: Boolean) {
+            sharedPreferences.edit {
+                putBoolean(Constants.PERMISSIONS_DENIED_PREF, denied)
+            }
+        }
+
     }
 }

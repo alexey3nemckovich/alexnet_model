@@ -1,6 +1,7 @@
 package com.alexnet.domain.repository
 
 import com.alexnet.domain.model.Response
+import com.alexnet.domain.model.TranscriptionOutput
 import java.io.File
 
 

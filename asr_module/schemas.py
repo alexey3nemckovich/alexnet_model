@@ -10,7 +10,7 @@ from decoder.greedy_decoder import GreedyCTCDecoder
 
 
 class TranscriptionOutput(BaseModel):
-    output: str
+    text: str
 
 
 class AsrModel:
@@ -45,4 +45,4 @@ class AsrModel:
         decoder = GreedyCTCDecoder(labels=self.bundle.get_labels())
         transcript = decoder(emission[0]).replace("|", " ").lower()
 
-        return TranscriptionOutput(output=transcript)
+        return TranscriptionOutput(text=transcript)

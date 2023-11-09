@@ -16,8 +16,15 @@ asr_model = AsrModel()
 
 
 #, response_model=TranscriptionOutput
-@app.post("/transcription")
+@app.post("/transcription", response_model=TranscriptionOutput)
 async def get_transcription(file: UploadFile = File(...)):
+    print("1")
+    response = asr_model.get_audio_transcription(file)
+    print("2")
+    print(response.text)
+    print("3")
+    return response
+
     # print("request get file")
     #
     # # Define the local path where you want to save the file
@@ -32,12 +39,7 @@ async def get_transcription(file: UploadFile = File(...)):
     #
     # return "good"  ## response.output
 
-    print("1")
-    response = asr_model.get_audio_transcription(file)
-    print("2")
-    print(response.output)
-    print("3")
-    return response.output
+
     #
     # print("request get file")
     #

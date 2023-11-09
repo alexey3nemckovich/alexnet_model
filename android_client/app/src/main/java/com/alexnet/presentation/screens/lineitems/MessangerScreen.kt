@@ -8,6 +8,7 @@ import com.alexnet.presentation.MainViewModel
 import com.alexnet.presentation.screens.lineitems.components.MessangerContent
 import com.alexnet.presentation.screens.lineitems.components.GenerateResponseProgress
 import com.alexnet.presentation.screens.lineitems.components.ConvertSpeechToTextProgress
+import com.alexnet.presentation.screens.lineitems.components.ConvertTextToSpeechProgress
 
 @Composable
 fun MessangerScreen(
@@ -35,4 +36,5 @@ fun MessangerScreen(
 
     GenerateResponseProgress()
     ConvertSpeechToTextProgress()
+    ConvertTextToSpeechProgress()
 }
