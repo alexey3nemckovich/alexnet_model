@@ -2,12 +2,11 @@ if __name__ == '__main__':
     import os
     import argparse
     import torch
-    from model_builder import Seq2SeqModel
-    from engine import train
-    from data_setup import create_dataloader
-    from text_transform import preprocess_data, build_text_transform
+    from engine.model_builder import Seq2SeqModel
+    from engine.engine import train
+    from data_setup.data_setup import create_dataloader
+    from text_processing.text_transform import preprocess_data, build_text_transform
     from datetime import datetime
-    from utils import save_transform
 
     # Create a parser
     parser = argparse.ArgumentParser(description="Get some hyperparameters.")

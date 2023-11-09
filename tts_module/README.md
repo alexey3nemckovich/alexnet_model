@@ -2,17 +2,6 @@
 Implement google's [Tacotron](https://arxiv.org/abs/1703.10135) TTS system with pytorch. 
 ![tacotron](asset/arch_fig.jpg)
 
-## Updates
-2018/09/15 => Fix RNN feeding bug.  
-2018/11/04 => Add attention mask and loss mask.  
-2019/05/17 => 2nd version updated.  
-2019/05/28 => fix attention plot bug.  
-
-## TODO
-- [ ] Add vocoder
-- [ ] Multispeaker version
-
-
 ## Requirements
 See `used_packages.txt`.
 
@@ -67,11 +56,6 @@ $ python generate_speech.py --text "For example, Taiwan is a great place." \
                             --config config/config.yaml
 ```
 
-
-## Samples
-All the samples can be found [here](https://github.com/ttaoREtw/Tacotron-pytorch/tree/master/samples). These samples are generated after 102k updates.
-
-
 ## Checkpoint
 The pretrained model can be downloaded in this [link](https://drive.google.com/file/d/1q8xLo9zyyclIDgYk3V2mczofnQwqT6pk/view?usp=sharing).
 
@@ -89,4 +73,5 @@ This work is based on r9y9's [implementation](https://github.com/r9y9/tacotron_p
 
 ## Refenrence
 * Tacotron: Towards End-to-End Speech Synthesis [[link](https://arxiv.org/abs/1703.10135)]
+
 
