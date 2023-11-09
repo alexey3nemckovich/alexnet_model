@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,8 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawStyle
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -76,6 +79,21 @@ fun MessangerContent(
                     .fillMaxWidth()
                     .weight(1f)
             ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                ){
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        items(messages) { message ->
+                            MessageItem(message)
+                        }
+                    }
+                }
+
                 if (viewModel.recordingAudio) {
                     val pulseAnim = rememberInfiniteTransition()
                     val scale by pulseAnim.animateFloat(
@@ -93,7 +111,9 @@ fun MessangerContent(
                             .background(Color(0x80000000)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Box(
                                 modifier = Modifier
                                     .size(100.dp)
@@ -108,6 +128,13 @@ fun MessangerContent(
                                             radius = circleRadius,
                                             center = Offset(size.width / 2, size.height / 2)
                                         )
+                                        val circleRadius2 = circleRadius + 10.0f
+                                        drawCircle(
+                                            color = Color.Black,
+                                            style = Stroke(width=2.0f),
+                                            radius = circleRadius2,
+                                            center = Offset(size.width / 2, size.height / 2)
+                                        )
                                     }
                             )
                             Text(
@@ -115,21 +142,6 @@ fun MessangerContent(
                                 color = Color.White,
                                 fontSize = 16.sp
                             )
-                        }
-                    }
-                }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                ){
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        items(messages) { message ->
-                            MessageItem(message)
                         }
                     }
                 }

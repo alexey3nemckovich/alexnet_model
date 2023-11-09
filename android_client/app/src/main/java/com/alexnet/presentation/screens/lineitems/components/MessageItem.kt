@@ -20,7 +20,8 @@ fun MessageItem(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(vertical = 5.dp),
         contentAlignment = if (message.bot) Alignment.TopStart else Alignment.TopEnd
     ) {
         Box(
