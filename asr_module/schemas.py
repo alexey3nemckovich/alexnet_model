@@ -23,8 +23,10 @@ class AsrModel:
         print("loading model")
 
         torch.random.manual_seed(0)
+        torch.hub.set_dir("models")
+
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
+        self.bundle = torchaudio.pipelines.HUBERT_ASR_XLARGE
         self.model = self.bundle.get_model().to(self.device)
 
         print("loaded")

@@ -82,7 +82,7 @@ fun MessangerContent(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                        .padding(start = 8.dp, end = 8.dp)
                 ){
                     LazyColumn(
                         modifier = Modifier

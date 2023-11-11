@@ -3,7 +3,7 @@ Implement google's [Tacotron](https://arxiv.org/abs/1703.10135) TTS system with 
 ![tacotron](asset/arch_fig.jpg)
 
 ## Requirements
-See `used_packages.txt`.
+See `requirements.txt`.
 
 
 ## Usage
@@ -73,5 +73,6 @@ This work is based on r9y9's [implementation](https://github.com/r9y9/tacotron_p
 
 ## Refenrence
 * Tacotron: Towards End-to-End Speech Synthesis [[link](https://arxiv.org/abs/1703.10135)]
+
 
 
