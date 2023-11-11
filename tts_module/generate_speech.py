@@ -33,7 +33,7 @@ def load_ckpt(config, ckpt_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Synthesize speech')
-    parser.add_argument('--text', default='Welcome to national taiwan university speech lab.', type=str, help='Text to synthesize', required=False)
+    parser.add_argument('--text', default='Hello, world!', type=str, help='Text to synthesize', required=False)
     parser.add_argument('--output', default='output.wav', type=str, help='Output path', required=False)
     parser.add_argument('--checkpoint-path', type=str, help='Checkpoint path', required=True)
     parser.add_argument('--config', default='config/config.yaml', type=str, help='Path to config file', required=False)
